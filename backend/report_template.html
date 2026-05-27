@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920">
+<title>Website Opportunity Review - {{ client_name }} | BlueRock Digital</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────
+   DESIGN TOKENS
+───────────────────────────────────────────── */
+:root {
+  --blue:     #0027E3;
+  --aqua:     #00FFCC;
+  --purple:   #7000FF;
+  --magenta:  #F605FE;
+  --mint:     #CCFFEA;
+  --softblue: #D5E8FF;
+  --lavender: #E3CAFF;
+  --pink:     #FDCBFF;
+
+  --navy:    #06103A;
+  --ink:     #141C3A;
+  --slate:   #3D4A6B;
+  --muted:   #7A849E;
+  --border:  #E4E9F5;
+  --surface: #F7F9FE;
+  --white:   #FFFFFF;
+
+  --r-sm:  8px;
+  --r-md:  12px;
+  --r-lg:  16px;
+  --r-xl:  22px;
+
+  --shadow-sm: 0 1px 4px rgba(0,39,227,.06), 0 2px 12px rgba(0,0,0,.04);
+  --shadow-md: 0 4px 20px rgba(0,39,227,.08), 0 1px 4px rgba(0,0,0,.04);
+  --shadow-lg: 0 8px 40px rgba(0,39,227,.12), 0 2px 8px rgba(0,0,0,.06);
+
+  --font-body:    'Noto Sans', sans-serif;
+  --font-display: 'Noto Serif', serif;
+
+  --page-w: 1920px;
+  --page-h: 1080px;
+}
+
+/* ─────────────────────────────────────────────
+   RESET & BASE
+───────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  background: #CBD5E1;
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─────────────────────────────────────────────
+   PAGE SHELL
+───────────────────────────────────────────── */
+.page {
+  width: var(--page-w);
+  height: var(--page-h);
+  background: var(--white);
+  margin: 32px auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 12px 60px rgba(0,0,0,.22);
+  page-break-after: always;
+}
+
+/* left accent rule */
+.page::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 5px;
+  background: linear-gradient(180deg, var(--blue) 0%, var(--purple) 55%, var(--magenta) 100%);
+  z-index: 10;
+}
+
+/* ─────────────────────────────────────────────
+   PAGE HEADER
+───────────────────────────────────────────── */
+.ph {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 52px 0 56px;
+  height: 62px;
+  border-bottom: 1.5px solid var(--border);
+  flex-shrink: 0;
+  background: var(--white);
+}
+.ph-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.ph-logo {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--blue);
+  letter-spacing: -.01em;
+}
+.ph-logo-mark {
+  width: 28px; height: 28px;
+  background: var(--blue);
+  border-radius: 7px;
+  display: grid;
+  place-items: center;
+}
+.ph-logo-mark span {
+  color: var(--white);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: -.03em;
+}
+.ph-sep { width: 1px; height: 20px; background: var(--border); }
+.ph-client {
+  font-size: 12.5px;
+  color: var(--muted);
+  font-weight: 400;
+}
+.ph-client strong { color: var(--ink); font-weight: 600; }
+.ph-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.ph-domain {
+  font-size: 11.5px;
+  color: var(--blue);
+  font-weight: 500;
+  background: var(--softblue);
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+.ph-date {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ─────────────────────────────────────────────
+   MONTH ROADMAP NAV
+───────────────────────────────────────────── */
+.roadmap-nav {
+  display: flex;
+  align-items: stretch;
+  padding: 0 56px;
+  gap: 0;
+  background: var(--surface);
+  border-bottom: 1.5px solid var(--border);
+  flex-shrink: 0;
+  height: 50px;
+}
+.rn-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 22px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font-body);
+  cursor: default;
+  position: relative;
+  transition: background .15s;
+  white-space: nowrap;
+}
+.rn-item + .rn-item {
+  border-left: 1px solid var(--border);
+}
+.rn-num {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  opacity: .65;
+}
+.rn-label { font-size: 12px; font-weight: 600; }
+
+/* Active */
+.rn-item.active {
+  background: var(--blue);
+  color: var(--white);
+}
+.rn-item.active .rn-num { opacity: .75; color: var(--aqua); }
+.rn-item.active .rn-label { color: var(--white); }
+.rn-item.active .rn-dot { background: var(--aqua); }
+
+/* Locked */
+.rn-item.locked {
+  color: var(--muted);
+}
+.rn-item.locked .rn-label { color: #B4BECC; }
+.rn-item.locked .rn-num { color: #C4CEDB; }
+
+.rn-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+  flex-shrink: 0;
+}
+.rn-lock {
+  font-size: 10px;
+  opacity: .35;
+  margin-left: 2px;
+}
+/* Trailing arrow connector */
+.rn-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-left: 8px solid transparent;
+  border-right: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  z-index: 2;
+}
+.rn-item.active::after {
+  border-left-color: var(--blue);
+}
+
+/* ─────────────────────────────────────────────
+   PAGE BODY
+───────────────────────────────────────────── */
+.pb {
+  flex: 1;
+  padding: 32px 52px 24px 56px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* ─────────────────────────────────────────────
+   PAGE FOOTER
+───────────────────────────────────────────── */
+.pf {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 52px 0 56px;
+  height: 44px;
+  border-top: 1.5px solid var(--border);
+  flex-shrink: 0;
+  background: var(--white);
+}
+.pf-note {
+  font-size: 10.5px;
+  color: var(--muted);
+  letter-spacing: .02em;
+}
+.pf-brand {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--blue);
+  letter-spacing: -.01em;
+}
+.pf-pg {
+  font-size: 10.5px;
+  color: var(--muted);
+}
+.pf-pg strong { color: var(--slate); font-weight: 600; }
+
+/* ─────────────────────────────────────────────
+   TYPOGRAPHY UTILITIES
+───────────────────────────────────────────── */
+.display-xl {
+  font-family: var(--font-display);
+  font-size: 56px;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.06;
+  letter-spacing: -.02em;
+}
+.display-xl em { font-style: italic; color: var(--blue); }
+
+.display-lg {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.1;
+  letter-spacing: -.015em;
+}
+
+.section-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--blue);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.section-eyebrow::before {
+  content: '';
+  display: block;
+  width: 20px; height: 2px;
+  background: var(--magenta);
+  border-radius: 2px;
+}
+
+.section-sub {
+  font-size: 13px;
+  color: var(--muted);
+  max-width: 620px;
+  line-height: 1.65;
+  margin-top: 4px;
+  margin-bottom: 20px;
+}
+
+/* ─────────────────────────────────────────────
+   BADGES
+───────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px 3px 9px;
+  border-radius: 20px;
+  font-size: 10.5px;
+  font-weight: 700;
+  font-family: var(--font-body);
+  white-space: nowrap;
+  letter-spacing: .02em;
+}
+.b-high     { background: #FFE8EA; color: #C0001A; }
+.b-med      { background: #FFF3CD; color: #92600A; }
+.b-low      { background: var(--mint); color: #0A7A50; }
+.b-conf     { background: var(--softblue); color: var(--blue); }
+.b-hconf    { background: #D8F9F2; color: #0A7A5E; }
+.b-review   { background: var(--lavender); color: var(--purple); }
+.b-opp      { background: var(--lavender); color: var(--purple); }
+.b-good     { background: var(--mint); color: #0A7A50; }
+
+/* ─────────────────────────────────────────────
+   FINDING CARDS (universal component)
+───────────────────────────────────────────── */
+.cards-grid {
+  display: grid;
+  gap: 14px;
+}
+.cards-grid-2 { grid-template-columns: 1fr 1fr; }
+.cards-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+.finding-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+.finding-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+.finding-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,39,227,0.15);
+}
+
+.snap-card {
+    transition: transform 0.2s ease;
+    cursor: pointer;
+}
+.snap-card:hover {
+    transform: scale(1.03);
+}
+.finding-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+}
+.finding-card.sev-high::before   { background: #E8405A; }
+.finding-card.sev-medium::before { background: #F0A020; }
+.finding-card.sev-low::before    { background: #22C57A; }
+.finding-card.sev-good::before   { background: #22C57A; }
+
+.fc-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.fc-category {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .07em;
+}
+.fc-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.3;
+  margin-top: 2px;
+  font-family: var(--font-body);
+}
+.fc-finding {
+  font-size: 12px;
+  color: var(--slate);
+  line-height: 1.6;
+  border-left: 2px solid var(--border);
+  padding-left: 10px;
+}
+.fc-rec {
+  font-size: 12px;
+  color: var(--ink);
+  line-height: 1.55;
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+}
+.fc-rec-arrow {
+  color: var(--blue);
+  font-weight: 800;
+  font-size: 13px;
+  flex-shrink: 0;
+  margin-top: 0px;
+}
+.fc-badges {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: auto;
+  padding-top: 6px;
+  border-top: 1px solid var(--border);
+}
+
+/* ─────────────────────────────────────────────
+   SCREENSHOT PLACEHOLDERS
+───────────────────────────────────────────── */
+.screenshot-actual {
+  background: var(--surface);
+  border: 2px dashed #C5CEEA;
+  border-radius: var(--r-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+}
+.screenshot-actual::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 14px,
+    rgba(0,39,227,.025) 14px,
+    rgba(0,39,227,.025) 16px
+  );
+  pointer-events: none;
+}
+.sph-icon {
+  font-size: 32px;
+  opacity: .3;
+  position: relative;
+  z-index: 1;
+}
+.sph-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--slate);
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+.sph-sub {
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* Browser frame */
+.browser-frame {
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+.browser-chrome {
+  background: #F0F2FA;
+  padding: 9px 14px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border-bottom: 1px solid var(--border);
+}
+.bc-dot { width: 9px; height: 9px; border-radius: 50%; }
+.bc-dot.r { background: #FC5F57; }
+.bc-dot.y { background: #FEBC2E; }
+.bc-dot.g { background: #28C840; }
+.bc-url {
+  flex: 1;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 3px 10px;
+  font-size: 10.5px;
+  color: var(--muted);
+  margin-left: 8px;
+  font-family: var(--font-body);
+}
+
+/* ─────────────────────────────────────────────
+   CALLOUT PANEL
+───────────────────────────────────────────── */
+.callout {
+  border-radius: var(--r-md);
+  padding: 16px 20px;
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: var(--ink);
+}
+.callout.blue   { background: var(--softblue); border-left: 3px solid var(--blue); }
+.callout.mint   { background: var(--mint); border-left: 3px solid #22C57A; }
+.callout.lav    { background: var(--lavender); border-left: 3px solid var(--purple); }
+.callout.pink   { background: var(--pink); border-left: 3px solid var(--magenta); }
+.callout-label {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  margin-bottom: 5px;
+}
+.callout.blue .callout-label   { color: var(--blue); }
+.callout.mint .callout-label   { color: #0A7A50; }
+.callout.lav .callout-label    { color: var(--purple); }
+.callout.pink .callout-label   { color: #A0005A; }
+
+/* ─────────────────────────────────────────────
+   COVER: SCORE SNAPSHOT CHIPS
+───────────────────────────────────────────── */
+.snap-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+}
+.snap-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 14px 16px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.snap-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.snap-card.high::before   { background: #E8405A; }
+.snap-card.medium::before { background: #F0A020; }
+.snap-card.low::before    { background: #22C57A; }
+.snap-card.good::before   { background: #22C57A; }
+
+.snap-label { font-size: 10.5px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.snap-title { font-size: 14px; font-weight: 700; color: var(--navy); margin: 4px 0 8px; line-height: 1.2; }
+
+/* ─────────────────────────────────────────────
+   NEXT STEP COLUMNS
+───────────────────────────────────────────── */
+.next-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+  flex: 1;
+}
+.next-col {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 26px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+.next-col.col-fix { border-color: #F0D0D5; background: #FFFBFB; }
+.next-col.col-fix .nc-header { color: #C0001A; }
+.next-col.col-next { border-color: #C8DCF5; background: #F5F9FF; }
+.next-col.col-next .nc-header { color: var(--blue); }
+.next-col.col-val { border-color: #D8CCF5; background: #FAF8FF; }
+.next-col.col-val .nc-header { color: var(--purple); }
+
+.nc-icon {
+  font-size: 28px;
+  line-height: 1;
+}
+.nc-header {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -.01em;
+}
+.nc-sub {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-top: -8px;
+  line-height: 1.5;
+}
+.nc-divider { height: 1px; background: var(--border); }
+.nc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+.nc-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 12.5px;
+  color: var(--ink);
+  line-height: 1.5;
+}
+.nc-bullet {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  font-size: 9px;
+  font-weight: 800;
+  margin-top: 1px;
+}
+.col-fix  .nc-bullet { background: #FFE8EA; color: #C0001A; }
+.col-next .nc-bullet { background: var(--softblue); color: var(--blue); }
+.col-val  .nc-bullet { background: var(--lavender); color: var(--purple); }
+
+.nc-cta {
+  margin-top: auto;
+  padding: 12px 16px;
+  border-radius: var(--r-md);
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+}
+.col-fix  .nc-cta { background: #FFE8EA; color: #C0001A; }
+.col-next .nc-cta { background: var(--softblue); color: var(--blue); }
+.col-val  .nc-cta { background: var(--lavender); color: var(--purple); }
+
+/* ─────────────────────────────────────────────
+   LEGEND ROW
+───────────────────────────────────────────── */
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.legend-pip {
+  width: 8px; height: 8px;
+  border-radius: 2px;
+}
+.lp-high   { background: #E8405A; }
+.lp-med    { background: #F0A020; }
+.lp-low    { background: #22C57A; }
+.lp-conf   { background: var(--blue); }
+.lp-hconf  { background: #22C57A; }
+.lp-review { background: var(--purple); }
+
+/* ─────────────────────────────────────────────
+   LAYOUT UTILITIES
+───────────────────────────────────────────── */
+.row    { display: flex; gap: 20px; }
+.col    { display: flex; flex-direction: column; gap: 14px; }
+.f1 { flex: 1; }
+.f2 { flex: 2; }
+.f3 { flex: 3; }
+.mt-auto { margin-top: auto; }
+.gap-8  { gap: 8px; }
+.gap-12 { gap: 12px; }
+.gap-16 { gap: 16px; }
+.gap-20 { gap: 20px; }
+.mb-12  { margin-bottom: 12px; }
+.mb-16  { margin-bottom: 16px; }
+
+/* ─────────────────────────────────────────────
+   PRIORITY DOT
+───────────────────────────────────────────── */
+.prio-badge {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--blue);
+  color: var(--white);
+  display: inline-grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+/* DARK NEXT-STEP HERO */
+.dark-hero {
+  background: linear-gradient(135deg, var(--navy) 0%, #0E1A5C 60%, #1A0840 100%);
+  border-radius: var(--r-xl);
+  padding: 28px 32px;
+  color: var(--white);
+  position: relative;
+  overflow: hidden;
+}
+.dark-hero::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 240px; height: 240px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,255,204,.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.dh-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--aqua);
+  margin-bottom: 8px;
+}
+.dh-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.15;
+  margin-bottom: 10px;
+  letter-spacing: -.01em;
+}
+.dh-body {
+  font-size: 12.5px;
+  color: rgba(255,255,255,.7);
+  line-height: 1.7;
+}
+.dh-months {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.dh-month-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11.5px;
+  color: rgba(255,255,255,.6);
+}
+.dh-month-row .num {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--aqua);
+  width: 60px;
+  flex-shrink: 0;
+  letter-spacing: .04em;
+}
+.dh-month-row.dim { color: rgba(255,255,255,.35); }
+
+@media print {
+  body { background: white; }
+  .page { margin: 0; box-shadow: none; page-break-after: always; width: 100%; height: 100vh; }
+}
+.intro-text { margin-top:16px; font-size:11.5px; color:var(--slate); line-height:1.6; padding-right: 20px; }
+.intro-text p { margin: 0 0 8px 0; }
+.intro-text ul { margin: 0 0 12px 0; padding-left: 18px; }
+.intro-text li { margin-bottom: 4px; }
+        
+.ranking-box { margin-top: 24px; border: 1px solid var(--border); border-radius: var(--r-md); overflow: hidden; background: #fff; }
+.ranking-header { background: var(--surface); padding: 10px 14px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--navy); border-bottom: 1px solid var(--border); }
+.ranking-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+.ranking-table th { padding: 8px 14px; text-align: left; color: var(--muted); font-weight: 700; text-transform: uppercase; font-size: 9.5px; border-bottom: 1px solid var(--border); }
+.ranking-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--slate); vertical-align: top; }
+.ranking-table tr:last-child td { border-bottom: none; }
+.rt-rank { font-weight: 700; color: var(--navy); }
+        
+.fc-impact { padding: 10px 12px; font-size: 11px; border-radius: 0 4px 4px 0; margin: 10px 0; line-height: 1.5; border-left: 3px solid; }
+.fc-impact strong { font-weight: 800; text-transform: uppercase; font-size: 10px; letter-spacing: 0.05em; margin-bottom: 4px; display: block; opacity: 0.9; }   
+.finding-card.sev-high .fc-impact { background: #fff0f0; border-left-color: #ef4444; color: #b91c1c; }
+.finding-card.sev-medium .fc-impact { background: #fffdf0; border-left-color: #f59e0b; color: #b45309; }
+.finding-card.sev-low .fc-impact { background: #f8fafc; border-left-color: #64748b; color: #334155; }
+.finding-card.sev-good .fc-impact { background: #f0fdf4; border-left-color: #22c55e; color: #15803d; }
+.badge.b-effort { background-color: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+/* ─────────────────────────────────────────────
+   INTERACTIVE ANIMATIONS (ONLY FOR HTML/SCREEN)
+───────────────────────────────────────────── */
+@media screen {
+    /* 1. Hover Effect (Sudah lu punya, kita bikin lebih smooth) */
+    .snap-card, .finding-card, .next-col {
+        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+        cursor: default;
+    }
+    .snap-card:hover, .finding-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 30px rgba(0,39,227,0.12);
+    }
+    .next-col:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+    }
+
+    /* 2. Scroll Reveal Setup (Sembunyikan dulu di layar) */
+    .reveal-item {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    /* Class ini akan ditambahin oleh JavaScript saat di-scroll */
+    .reveal-item.active {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="ph">
+    <div class="ph-brand">
+      <div class="ph-logo">
+        <div class="ph-logo-mark"><span>BR</span></div>
+        BlueRock Digital
+      </div>
+      <div class="ph-sep"></div>
+      <div class="ph-client">Website Opportunity Review - <strong>{{ client_name }}</strong></div>
+    </div>
+    <div class="ph-right">
+      <span class="ph-domain">{{ client_url }}</span>
+      <span class="ph-date">{{ report_date }}</span>
+    </div>
+  </div>
+
+  <div class="roadmap-nav">
+    <div class="rn-item active">
+      <div class="rn-dot"></div>
+      <div>
+        <div class="rn-num">Month 1</div>
+        <div class="rn-label">SEO & AEO Foundations</div>
+      </div>
+    </div>
+    <div class="rn-item locked">
+      <div class="rn-dot"></div>
+      <div>
+        <div class="rn-num">Month 2</div>
+        <div class="rn-label">User Experience</div>
+      </div>
+      <span class="rn-lock">🔒</span>
+    </div>
+    <div class="rn-item locked">
+      <div class="rn-dot"></div>
+      <div>
+        <div class="rn-num">Month 3</div>
+        <div class="rn-label">Home Page First Impression</div>
+      </div>
+      <span class="rn-lock">🔒</span>
+    </div>
+    <div class="rn-item locked">
+      <div class="rn-dot"></div>
+      <div>
+        <div class="rn-num">Month 4</div>
+        <div class="rn-label">Conversion & Trust</div>
+      </div>
+      <span class="rn-lock">🔒</span>
+    </div>
+    <div class="rn-item locked">
+      <div class="rn-dot"></div>
+      <div>
+        <div class="rn-num">Month 5</div>
+        <div class="rn-label">Tech & Speed</div>
+      </div>
+      <span class="rn-lock">🔒</span>
+    </div>
+    <div class="rn-item locked">
+      <div class="rn-dot"></div>
+      <div>
+        <div class="rn-num">Month 6</div>
+        <div class="rn-label">Full Funnel Audit</div>
+      </div>
+      <span class="rn-lock">🔒</span>
+    </div>
+  </div>
+
+  <div class="pb" style="flex-direction:row; gap:44px; align-items:stretch;">
+
+    <div class="col f2" style="justify-content:flex-start;">
+      <div class="section-eyebrow">BlueRock Digital</div>
+      <h1 class="display-xl">Website<br>Opportunity<br><em>Review</em></h1>
+      
+      <div class="intro-text">
+        <p style="font-size: 13px; color: var(--navy);"><strong>Your customers are searching. The question is - can they find you?</strong></p>
+        <ul>
+            <li><strong>93%</strong> of online experiences start with a search engine - if you're not visible, you're invisible.</li>
+            <li>Over <strong>60%</strong> of Google searches now end without a click, with users taking answers directly from AI Overviews.</li>
+            <li><strong>1 in 4</strong> people are already using AI tools like ChatGPT to find and recommend businesses.</li>
+        </ul>
+        <p>This report reviews how ready your website is for both worlds: <strong>Search (SEO)</strong> and <strong>AI Answers (AEO)</strong>. Think of it as making sure your website works as hard as you do.</p>
+      </div>
+
+      <div class="ranking-box">
+          <div class="ranking-header">Live Google Search Visibility</div>
+          <table class="ranking-table">
+              <tr>
+                  <th>Search Term (Target)</th>
+                  <th>Position & Insight</th>
+              </tr>
+              {% for item in google_rankings %}
+              <tr>
+                  <td><strong>{{ item.keyword }}</strong></td>
+                  <td><span class="rt-rank">{{ item.rank }}</span></td>
+              </tr>
+              {% endfor %}
+          </table>
+      </div>
+
+    </div>
+
+    <div class="col f3" style="justify-content:center;">
+      <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">Executive Snapshot - 6 Findings Reviewed</div>
+      <div class="snap-grid">
+        
+        <div class="snap-card {{ findings['technical_seo_foundations']['severity'] | lower }}">
+          <div class="snap-label">Website Health</div>
+          <div class="snap-title">{{ findings['technical_seo_foundations']['title'] }}</div>
+          <span class="badge b-{{ findings['technical_seo_foundations']['severity'] | lower | replace('medium', 'med') }}">{{ findings['technical_seo_foundations']['severity'] }} Severity</span>
+        </div>
+
+        <div class="snap-card {{ findings['on_page_meta_hierarchy']['severity'] | lower }}">
+          <div class="snap-label">Google Listing</div>
+          <div class="snap-title">{{ findings['on_page_meta_hierarchy']['title'] }}</div>
+          <span class="badge b-{{ findings['on_page_meta_hierarchy']['severity'] | lower | replace('medium', 'med') }}">{{ findings['on_page_meta_hierarchy']['severity'] }} Severity</span>
+        </div>
+
+        <div class="snap-card {{ findings['schema_markup_presence']['severity'] | lower }}">
+          <div class="snap-label">Business Identity</div>
+          <div class="snap-title">{{ findings['schema_markup_presence']['title'] }}</div>
+          <span class="badge b-{{ findings['schema_markup_presence']['severity'] | lower | replace('medium', 'med') }}">{{ findings['schema_markup_presence']['severity'] }} Severity</span>
+        </div>
+
+        <div class="snap-card {{ findings['aeo_content_structure']['severity'] | lower }}">
+          <div class="snap-label">AI Readability</div>
+          <div class="snap-title">{{ findings['aeo_content_structure']['title'] }}</div>
+          <span class="badge b-{{ findings['aeo_content_structure']['severity'] | lower | replace('medium', 'med') }}">{{ findings['aeo_content_structure']['severity'] }} Severity</span>
+        </div>
+
+        <div class="snap-card {{ findings['faq_quality_and_formatting']['severity'] | lower }}">
+          <div class="snap-label">Customer Questions</div>
+          <div class="snap-title">{{ findings['faq_quality_and_formatting']['title'] }}</div>
+          <span class="badge b-{{ findings['faq_quality_and_formatting']['severity'] | lower | replace('medium', 'med') }}">{{ findings['faq_quality_and_formatting']['severity'] }} Severity</span>
+        </div>
+
+        <div class="snap-card {{ findings['ai_visibility_signals']['severity'] | lower }}">
+          <div class="snap-label">AI Presence</div>
+          <div class="snap-title">{{ findings['ai_visibility_signals']['title'] }}</div>
+          <span class="badge b-{{ findings['ai_visibility_signals']['severity'] | lower | replace('medium', 'med') }}">{{ findings['ai_visibility_signals']['severity'] }} Severity</span>
+        </div>
+
+      </div>
+      
+      <div style="margin-top:16px; padding:16px; background:#F8FAFC; border-radius:var(--r-md); border: 1px solid #E2E8F0; border-left: 4px solid var(--blue);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <span style="font-size:13px; font-weight:800; color:var(--navy); text-transform: uppercase; letter-spacing: 0.05em;">Overall Search Foundation</span>
+              <span style="font-size:20px; font-weight:900; color:var(--navy);">{{ audit_score }}/10</span>
+          </div>
+          <div style="font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 8px;">
+              {{ score_label }}
+          </div>
+          <div style="font-size:12.5px; color:var(--slate); line-height: 1.5;">
+              {{ monetization_text }}
+          </div>
+      </div>
+      
+    </div>
+  </div>
+
+  <div class="pf">
+    <span class="pf-brand">BlueRock Digital</span>
+    <span class="pf-note">This analysis is a starting point only - website recommendations should be confirmed against business priorities and supporting data before being implemented.</span>
+    <span class="pf-pg">Page <strong>1</strong> of 4</span>
+  </div>
+</div>
+
+
+<div class="page">
+  <div class="ph">
+    <div class="ph-brand"><div class="ph-logo"><div class="ph-logo-mark"><span>BR</span></div>BlueRock Digital</div><div class="ph-sep"></div><div class="ph-client">Website Opportunity Review - <strong>{{ client_name }}</strong></div></div>
+    <div class="ph-right"><span class="ph-domain">{{ client_url }}</span><span class="ph-date">{{ report_date }}</span></div>
+  </div>
+  
+  <div class="roadmap-nav">
+    <div class="rn-item active"><div class="rn-dot"></div><div><div class="rn-num">Month 1</div><div class="rn-label">SEO & AEO Foundations</div></div></div>
+    <div class="rn-item locked"><div class="rn-dot"></div><div><div class="rn-num">Month 2</div><div class="rn-label">User Experience</div></div><span class="rn-lock">🔒</span></div>
+    <div class="rn-item locked"><div class="rn-dot"></div><div><div class="rn-num">Month 3</div><div class="rn-label">Home Page First Impression</div></div><span class="rn-lock">🔒</span></div>
+    <div class="rn-item locked"><div class="rn-dot"></div><div><div class="rn-num">Month 4</div><div class="rn-label">Conversion & Trust</div></div><span class="rn-lock">🔒</span></div>
+    <div class="rn-item locked"><div class="rn-dot"></div><div><div class="rn-num">Month 5</div><div class="rn-label">Tech & Speed</div></div><span class="rn-lock">🔒</span></div>
+    <div class="rn-item locked"><div class="rn-dot"></div><div><div class="rn-num">Month 6</div><div class="rn-label">Full Funnel Audit</div></div><span class="rn-lock">🔒</span></div>
+  </div>
+
+  <div class="pb">
+    <div class="section-eyebrow">Critical & Important Findings</div>
+    <h2 class="display-lg" style="margin-bottom:4px;">High &amp; Medium Severity</h2>
+    <p class="section-sub">Four findings requiring attention to improve search visibility and AI extraction.</p>
+
+    <div class="cards-grid cards-grid-2" style="flex:1;">
+
+      <div class="finding-card sev-{{ findings['technical_seo_foundations']['severity'] | lower }}">
+        <div class="fc-top">
+          <div>
+            <div class="fc-category">Website Health</div>
+            <div class="fc-title">{{ findings['technical_seo_foundations']['title'] }}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
+            <span class="badge b-{{ findings['technical_seo_foundations']['severity'] | lower | replace('medium', 'med') }}">{{ findings['technical_seo_foundations']['severity'] }} Severity</span>
+          </div>
+        </div>
+        <div class="fc-finding">{{ findings['technical_seo_foundations']['finding'] }}</div>
+        <div class="fc-impact"><strong>Commercial Consequence</strong>{{ findings['technical_seo_foundations']['business_impact'] }}</div>
+        <div class="fc-rec"><span class="fc-rec-arrow">→</span><span>{{ findings['technical_seo_foundations']['recommendation'] }}</span></div>
+        <div class="fc-badges">
+            <span class="badge b-effort">{{ findings['technical_seo_foundations']['effort_label'] }}</span>
+            <span style="font-size:10.5px;color:var(--muted);margin-left:auto;">Priority 1</span>
+        </div>
+      </div>
+
+      <div class="finding-card sev-{{ findings['on_page_meta_hierarchy']['severity'] | lower }}">
+        <div class="fc-top">
+          <div>
+            <div class="fc-category">Google Listing</div>
+            <div class="fc-title">{{ findings['on_page_meta_hierarchy']['title'] }}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
+            <span class="badge b-{{ findings['on_page_meta_hierarchy']['severity'] | lower | replace('medium', 'med') }}">{{ findings['on_page_meta_hierarchy']['severity'] }} Severity</span>
+          </div>
+        </div>
+        <div class="fc-finding">{{ findings['on_page_meta_hierarchy']['finding'] }}</div>
+        <div class="fc-impact"><strong>Commercial Consequence</strong>{{ findings['on_page_meta_hierarchy']['business_impact'] }}</div>
+        <div class="fc-rec"><span class="fc-rec-arrow">→</span><span>{{ findings['on_page_meta_hierarchy']['recommendation'] }}</span></div>
+        <div class="fc-badges">
+            <span class="badge b-effort">{{ findings['on_page_meta_hierarchy']['effort_label'] }}</span>
+            <span style="font-size:10.5px;color:var(--muted);margin-left:auto;">Priority 2</span>
+        </div>
+      </div>
+
+      <div class="finding-card sev-{{ findings['schema_markup_presence']['severity'] | lower }}">
+        <div class="fc-top">
+          <div>
+            <div class="fc-category">Business Identity</div>
+            <div class="fc-title">{{ findings['schema_markup_presence']['title'] }}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
+            <span class="badge b-{{ findings['schema_markup_presence']['severity'] | lower | replace('medium', 'med') }}">{{ findings['schema_markup_presence']['severity'] }} Severity</span>
+          </div>
+        </div>
+        <div class="fc-finding">{{ findings['schema_markup_presence']['finding'] }}</div>
+        <div class="fc-impact"><strong>Commercial Consequence</strong>{{ findings['schema_markup_presence']['business_impact'] }}</div>
+        <div class="fc-rec"><span class="fc-rec-arrow">→</span><span>{{ findings['schema_markup_presence']['recommendation'] }}</span></div>
+        <div class="fc-badges">
+            <span class="badge b-effort">{{ findings['schema_markup_presence']['effort_label'] }}</span>
+            <span style="font-size:10.5px;color:var(--muted);margin-left:auto;">Priority 3</span>
+        </div>
+      </div>
+
+      <div class="finding-card sev-{{ findings['aeo_content_structure']['severity'] | lower }}">
+        <div class="fc-top">
+          <div>
+            <div class="fc-category">AI Readability</div>
+            <div class="fc-title">{{ findings['aeo_content_structure']['title'] }}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
+            <span class="badge b-{{ findings['aeo_content_structure']['severity'] | lower | replace('medium', 'med') }}">{{ findings['aeo_content_structure']['severity'] }} Severity</span>
+          </div>
+        </div>
+        <div class="fc-finding">{{ findings['aeo_content_structure']['finding'] }}</div>
+        <div class="fc-impact"><strong>Commercial Consequence</strong>{{ findings['aeo_content_structure']['business_impact'] }}</div>
+        <div class="fc-rec"><span class="fc-rec-arrow">→</span><span>{{ findings['aeo_content_structure']['recommendation'] }}</span></div>
+        <div class="fc-badges">
+            <span class="badge b-effort">{{ findings['aeo_content_structure']['effort_label'] }}</span>
+            <span style="font-size:10.5px;color:var(--muted);margin-left:auto;">Priority 4</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="pf">
+    <span class="pf-brand">BlueRock Digital</span>
+    <span class="pf-note">This analysis is a starting point only - website recommendations should be confirmed against business priorities and supporting data before being implemented.</span>
+    <span class="pf-pg">Page <strong>2</strong> of 4</span>
+  </div>
+</div>
+
+
+<div class="page">
+  <div class="ph">
+    <div class="ph-brand"><div class="ph-logo"><div class="ph-logo-mark"><span>BR</span></div>BlueRock Digital</div><div class="ph-sep"></div><div class="ph-client">Website Opportunity Review - <strong>{{ client_name }}</strong></div></div>
+    <div class="ph-right"><span class="ph-domain">{{ client_url }}</span><span class="ph-date">{{ report_date }}</span></div>
+  </div>
+  
+  <div class="roadmap-nav">
+    <div class="rn-item active"><div class="rn-dot"></div><div><div class="rn-num">Month 1</div><div class="rn-label">SEO & AEO Foundations</div></div></div>
+    <div class="rn-item locked"><div class="rn-dot"></div><div><div class="rn-num">Month 2</div><div class="rn-label">User Experience</div></div><span class="rn-lock">🔒</span></div>
+    <div class="rn-item locked"><div class="rn-dot"></div><div><div class="rn-num">Month 3</div><div class="rn-label">Home Page First Impression</div></div><span class="rn-lock">🔒</span></div>
+    <div class="rn-item locked"><div class="rn-dot"></div><div><div class="rn-num">Month 4</div><div class="rn-label">Conversion & Trust</div></div><span class="rn-lock">🔒</span></div>
+    <div class="rn-item locked"><div class="rn-dot"></div><div><div class="rn-num">Month 5</div><div class="rn-label">Tech & Speed</div></div><span class="rn-lock">🔒</span></div>
+    <div class="rn-item locked"><div class="rn-dot"></div><div><div class="rn-num">Month 6</div><div class="rn-label">Full Funnel Audit</div></div><span class="rn-lock">🔒</span></div>
+  </div>
+
+  <div class="pb">
+    <div class="section-eyebrow">Visual Evidence & Remaining Findings</div>
+    <h2 class="display-lg" style="margin-bottom:4px;">Screenshots &amp; Supporting Detail</h2>
+    
+    <div class="row" style="flex:1; align-items:stretch;">
+
+      <div class="col f2 gap-12">
+        <div class="browser-frame" style="flex:1; display:flex; flex-direction:column;">
+          <div class="browser-chrome">
+            <div class="bc-dot r"></div><div class="bc-dot y"></div><div class="bc-dot g"></div>
+            <div class="bc-url">{{ client_url }} - Hero / Above the Fold (DOM Context)</div>
+          </div>
+          <div style="flex:1; position:relative; min-height:220px; overflow:hidden;">
+            <img src="{{ hero_img_path }}" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; object-position:top;" alt="Hero">
+          </div>
+        </div>
+
+        <div class="browser-frame" style="flex:1; display:flex; flex-direction:column;">
+          <div class="browser-chrome">
+            <div class="bc-dot r"></div><div class="bc-dot y"></div><div class="bc-dot g"></div>
+            <div class="bc-url">{{ client_url }} - Content & Footer (Schema Context)</div>
+          </div>
+          <div style="flex:1; position:relative; min-height:160px; overflow:hidden;">
+            <img src="{{ trust_img_path }}" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; object-position:bottom;" alt="Content">
+          </div>
+        </div>
+      </div>
+
+      <div class="col f2">
+
+        <div class="finding-card sev-{{ findings['faq_quality_and_formatting']['severity'] | lower }}" style="flex:1;">
+          <div class="fc-top">
+            <div>
+              <div class="fc-category">Customer Questions</div>
+              <div class="fc-title">{{ findings['faq_quality_and_formatting']['title'] }}</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
+              <span class="badge b-{{ findings['faq_quality_and_formatting']['severity'] | lower | replace('medium', 'med') }}">{{ findings['faq_quality_and_formatting']['severity'] }} Severity</span>
+            </div>
+          </div>
+          <div class="fc-finding">{{ findings['faq_quality_and_formatting']['finding'] }}</div>
+          <div class="fc-impact"><strong>Commercial Consequence</strong>{{ findings['faq_quality_and_formatting']['business_impact'] }}</div>
+          <div class="fc-rec"><span class="fc-rec-arrow">→</span><span>{{ findings['faq_quality_and_formatting']['recommendation'] }}</span></div>
+          <div class="fc-badges">
+            <span class="badge b-effort">{{ findings['faq_quality_and_formatting']['effort_label'] }}</span>
+          </div>
+        </div>
+
+        <div class="finding-card sev-{{ findings['ai_visibility_signals']['severity'] | lower }}" style="flex:1;">
+          <div class="fc-top">
+            <div>
+              <div class="fc-category">AI Presence</div>
+              <div class="fc-title">{{ findings['ai_visibility_signals']['title'] }}</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
+              <span class="badge b-{{ findings['ai_visibility_signals']['severity'] | lower | replace('medium', 'med') }}">{{ findings['ai_visibility_signals']['severity'] }} Severity</span>
+            </div>
+          </div>
+          <div class="fc-finding">{{ findings['ai_visibility_signals']['finding'] }}</div>
+          <div class="fc-impact"><strong>Commercial Consequence</strong>{{ findings['ai_visibility_signals']['business_impact'] }}</div>
+          <div class="fc-rec"><span class="fc-rec-arrow">→</span><span>{{ findings['ai_visibility_signals']['recommendation'] }}</span></div>
+          <div class="fc-badges">
+            <span class="badge b-effort">{{ findings['ai_visibility_signals']['effort_label'] }}</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="pf">
+    <span class="pf-brand">BlueRock Digital</span>
+    <span class="pf-note">This analysis is a starting point only - website recommendations should be confirmed against business priorities and supporting data before being implemented.</span>
+    <span class="pf-pg">Page <strong>3</strong> of 4</span>
+  </div>
+</div>
+
+
+<div class="page">
+  <div class="ph">
+    <div class="ph-brand"><div class="ph-logo"><div class="ph-logo-mark"><span>BR</span></div>BlueRock Digital</div><div class="ph-sep"></div><div class="ph-client">Website Opportunity Review - <strong>{{ client_name }}</strong></div></div>
+    <div class="ph-right"><span class="ph-domain">{{ client_url }}</span><span class="ph-date">{{ report_date }}</span></div>
+  </div>
+  
+  <div class="roadmap-nav">
+    <div class="rn-item active"><div class="rn-dot"></div><div><div class="rn-num">Month 1</div><div class="rn-label">SEO & AEO Foundations</div></div></div>
+    <div class="rn-item locked"><div class="rn-dot"></div><div><div class="rn-num">Month 2</div><div class="rn-label">User Experience</div></div><span class="rn-lock">🔒</span></div>
+    <div class="rn-item locked"><div class="rn-dot"></div><div><div class="rn-num">Month 3</div><div class="rn-label">Home Page First Impression</div></div><span class="rn-lock">🔒</span></div>
+    <div class="rn-item locked"><div class="rn-dot"></div><div><div class="rn-num">Month 4</div><div class="rn-label">Conversion & Trust</div></div><span class="rn-lock">🔒</span></div>
+    <div class="rn-item locked"><div class="rn-dot"></div><div><div class="rn-num">Month 5</div><div class="rn-label">Tech & Speed</div></div><span class="rn-lock">🔒</span></div>
+    <div class="rn-item locked"><div class="rn-dot"></div><div><div class="rn-num">Month 6</div><div class="rn-label">Full Funnel Audit</div></div><span class="rn-lock">🔒</span></div>
+  </div>
+
+  <div class="pb">
+    <div class="section-eyebrow">Summary</div>
+    <h2 class="display-lg" style="margin-bottom:20px;">Where to from here?</h2>
+
+    <div class="next-cols">
+
+      <div class="next-col col-fix">
+        <div class="nc-icon">🔧</div>
+        <div class="nc-header">Fix now (effort estimation)</div>
+        <div class="nc-sub">High &amp; medium severity items</div>
+        <div class="nc-divider"></div>
+        <div class="nc-list">
+          <div class="nc-item"><div class="nc-bullet">1</div><div><strong>{{ findings['technical_seo_foundations']['effort_label'] }}:</strong> {{ findings['technical_seo_foundations']['recommendation'] }}</div></div>
+          <div class="nc-item"><div class="nc-bullet">2</div><div><strong>{{ findings['on_page_meta_hierarchy']['effort_label'] }}:</strong> {{ findings['on_page_meta_hierarchy']['recommendation'] }}</div></div>
+          <div class="nc-item"><div class="nc-bullet">3</div><div><strong>{{ findings['schema_markup_presence']['effort_label'] }}:</strong> {{ findings['schema_markup_presence']['recommendation'] }}</div></div>
+          <div class="nc-item"><div class="nc-bullet">4</div><div><strong>{{ findings['aeo_content_structure']['effort_label'] }}:</strong> {{ findings['aeo_content_structure']['recommendation'] }}</div></div>
+          <div class="nc-item"><div class="nc-bullet">5</div><div><strong>{{ findings['faq_quality_and_formatting']['effort_label'] }}:</strong> {{ findings['faq_quality_and_formatting']['recommendation'] }}</div></div>
+        </div>
+        <div class="nc-cta">
+          <div style="margin-bottom: 4px;">Immediate action items</div>
+          <div style="font-size: 10px; opacity: 0.8;">
+              {{ count_critical }} Critical · {{ count_important }} Important · {{ count_low }} Low - Prioritised order recommended before full scoping.
+          </div>
+        </div>
+      </div>
+
+      <div class="next-col col-next">
+        <div class="nc-icon">🔭</div>
+        <div class="nc-header">Coming month 2</div>
+        <div class="nc-sub">UX Audit - what we'll review next.</div>
+        <div class="nc-divider"></div>
+        <div class="nc-list">
+          <div class="nc-item"><div class="nc-bullet">→</div><div><strong>Navigation structure</strong> - clarity, depth and mobile usability</div></div>
+          <div class="nc-item"><div class="nc-bullet">→</div><div><strong>Page load speed</strong> - Core Web Vitals, LCP and INP assessment</div></div>
+          <div class="nc-item"><div class="nc-bullet">→</div><div><strong>Mobile tap targets</strong> - size, spacing and accessibility on small screens</div></div>
+          <div class="nc-item"><div class="nc-bullet">→</div><div><strong>User journey mapping</strong> - homepage to enquiry path review</div></div>
+          <div class="nc-item"><div class="nc-bullet">→</div><div><strong>CTA visibility</strong> - placement, specificity and conversion friction</div></div>
+        </div>
+        <div class="nc-cta"><div style="margin-bottom: 4px;">Coming month 2</div></div>
+      </div>
+
+      <div class="next-col col-val">
+        <div class="nc-icon">🔍</div>
+        <div class="nc-header">Needs deeper validation</div>
+        <div class="nc-sub">Useful observations - require more context before prioritising.</div>
+        <div class="nc-divider"></div>
+        <div class="nc-list">
+          <div class="nc-item"><div class="nc-bullet">?</div><div><strong>Deep crawl analysis</strong> - uncover orphaned pages or redirect loops via Screaming Frog.</div></div>
+          <div class="nc-item"><div class="nc-bullet">?</div><div><strong>Keyword cannibalization</strong> - requires Google Search Console data to validate intent overlaps.</div></div>
+          <div class="nc-item"><div class="nc-bullet">?</div><div><strong>Backlink toxicity</strong> - needs third-party tools (Ahrefs/SEMrush) to assess referring domains.</div></div>
+          <div class="nc-item"><div class="nc-bullet">?</div><div><strong>Content gap analysis</strong> - benchmarked against top 3 competitors in AI Answers.</div></div>
+          <div class="nc-item"><div class="nc-bullet">?</div><div><strong>Advanced Schema</strong> - assessing viability for HowTo or VideoObject schema integration.</div></div>
+        </div>
+        <div class="nc-cta"><div style="margin-bottom: 4px;">Needs deeper validation</div></div>
+      </div>
+
+    </div>
+
+    <div class="dark-hero" style="margin-top:16px; flex-direction:row; display:flex; align-items:center; gap:40px; padding:20px 28px;">
+      <div style="flex:2;">
+        <div class="dh-eyebrow">BlueRock Digital · 6-Month Roadmap</div>
+        <div class="dh-title">A structured programme - one focused layer at a time.</div>
+        <div class="dh-body">Each month builds on the last. A website is not a set-and-forget asset; even small, targeted improvements can strengthen brand visibility, search performance, and the overall customer journey over time.</div>
+      </div>
+      <div style="flex:1; display:grid; grid-template-columns:1fr 1fr; gap:5px 16px;">
+        <div class="dh-month-row"><span class="num">Month 1</span> SEO &amp; AEO Foundations ✓</div>
+        <div class="dh-month-row dim"><span class="num">Month 2</span> User Experience</div>
+        <div class="dh-month-row dim"><span class="num">Month 3</span> First Impression</div>
+        <div class="dh-month-row dim"><span class="num">Month 4</span> Conversion &amp; Trust</div>
+        <div class="dh-month-row dim"><span class="num">Month 5</span> Tech &amp; Speed</div>
+        <div class="dh-month-row dim"><span class="num">Month 6</span> Full Funnel Audit</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pf">
+    <span class="pf-brand">BlueRock Digital</span>
+    <span class="pf-note">This analysis is a starting point only - website recommendations should be confirmed against business priorities and supporting data before being implemented.</span>
+    <span class="pf-pg">Page <strong>4</strong> of 4</span>
+  </div>
+</div>
+
+<script>
+    if (window.matchMedia('screen').matches) {
+        document.addEventListener("DOMContentLoaded", function() {
+            const cards = document.querySelectorAll('.snap-card, .finding-card, .next-col, .dark-hero');
+            cards.forEach(card => card.classList.add('reveal-item'));
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => { entry.target.classList.add('active'); }, 100);
+                        observer.unobserve(entry.target); 
+                    }
+                });
+            }, { threshold: 0.1 }); 
+            cards.forEach(card => observer.observe(card));
+        });
+    }
+</script>
+</body>
+</html>
