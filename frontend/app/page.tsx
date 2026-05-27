@@ -130,6 +130,7 @@ export default function Home() {
       header: true,
       skipEmptyLines: true,
       complete: async (results: any) => {
+        // Filter baris yang valid
         const rows = results.data.filter((r: any) => r.name && r.url);
         if (rows.length === 0) return showNotification("error", "CSV must have 'name' and 'url' columns with valid data");
 
@@ -138,8 +139,18 @@ export default function Home() {
 
         for (let i = 0; i < rows.length; i++) {
           const row = rows[i];
-          await runAudit(row.name.trim(), row.url.trim());
+          
+          // Auto-Sanitize: Bersihkan tanda kutip (") atau spasi nyasar dari CSV
+          const cleanName = row.name.trim().replace(/['"]/g, '');
+          const cleanUrl = row.url.trim().replace(/['"]/g, '');
+
+          await runAudit(cleanName, cleanUrl);
           setBatchProgress({ current: i + 1, total: rows.length });
+
+          // Smart Throttling: Beri jeda 10 detik ke server Render sebelum lanjut ke klien berikutnya (kecuali ini klien terakhir)
+          if (i < rows.length - 1) {
+            await new Promise(resolve => setTimeout(resolve, 10000));
+          }
         }
 
         setLoading(false);
