@@ -1,5 +1,13 @@
+# Environments
 .env
-.venv
-env/
 venv/
-ENV/
+env/
+__pycache__/
+
+# Output files (jangan biarkan file PDF/Excel klien nyangkut di GitHub)
+data/outputs/*
+!data/outputs/.gitkeep
+
+# OS generated files
+.DS_Store
+Thumbs.db
