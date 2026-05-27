@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+pydantic
+requests
+beautifulsoup4
+playwright
+pandas
+openpyxl
+jinja2
+python-dotenv
+google-genai
