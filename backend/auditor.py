@@ -272,7 +272,7 @@ def generate_seo_aeo_audit(scrape_data, site_img_path, target_name, client):
         2. TITLES: Use sentence case for all titles (e.g., 'Website health' instead of 'Website Health').
         3. SCORING: 0="High", 1="Medium", 2="Good".
         4. BUSINESS IMPACT: Provide a `business_impact` explaining the consequence in plain English.
-        5. EFFORT ESTIMATION: Assign `effort_label`: "⚡ Quick win", "🔧 Light lift", "🛠️ Moderate build", or "🏗️ Strategic project".
+        5. EFFORT ESTIMATION: Assign `effort_label`: "Quick win", "Light lift", "Moderate build", or "Strategic project". DO NOT USE EMOJIS.
         
         SPECIFIC CATEGORY INSTRUCTIONS:
         - faq_quality_and_formatting: 
@@ -282,7 +282,7 @@ def generate_seo_aeo_audit(scrape_data, site_img_path, target_name, client):
         
         OUTPUT SCHEMA INSTRUCTION (JSON ONLY):
         You MUST return EXACTLY 6 objects in the 'audits' array. 
-        The 'category' value of each object MUST be EXACTLY one of these strings (do not change, capitalize, or invent new categories):
+        The 'category' value of each object MUST be EXACTLY one of these strings:
         1. "technical_seo_foundations"
         2. "on_page_meta_hierarchy"
         3. "schema_markup_presence"
@@ -301,7 +301,7 @@ def generate_seo_aeo_audit(scrape_data, site_img_path, target_name, client):
                   "finding": "...",
                   "business_impact": "...",
                   "recommendation": "...",
-                  "effort_label": "⚡ Quick win"
+                  "effort_label": "Quick win"
                 }}
             ]
         }}
@@ -410,13 +410,13 @@ def generate_automated_pdf(client_name, url, hero_path, trust_path, analysis, cl
                 "finding": "The site's security firewall (WAF) prevented the engine from extracting this specific DOM element.",
                 "business_impact": "Overly strict firewalls can inadvertently block legitimate AI crawlers like ChatGPT from reading your site.",
                 "recommendation": "Review firewall rules to ensure emerging AI crawlers are whitelisted.",
-                "effort_label": "🔧 Light lift"
+                "effort_label": "Light lift" # <--- EMOJI DIHAPUS DI SINI
             }
 
-    # 3. Kalkulasi murni dari Dictionary yang sudah di-patch
+    # 3. Kalkulasi murni
     count_critical = sum(1 for x in findings_dict.values() if x.get('severity') == 'High')
     count_important = sum(1 for x in findings_dict.values() if x.get('severity') == 'Medium')
-    count_low = sum(1 for x in findings_dict.values() if x.get('severity') == 'Low')
+    count_low = sum(1 for x in findings_dict.values() if x.get('severity') in ['Low', 'Good'])
     
     total_deductions = (count_critical * 2) + (count_important * 1) + (count_low * 0.5)
     raw_score = max(0, 10 - total_deductions)
@@ -437,6 +437,18 @@ def generate_automated_pdf(client_name, url, hero_path, trust_path, analysis, cl
     else:
         score_label = "🔴 Needs Immediate Attention"
         monetization_text = "Your website is largely invisible to Google and AI tools. Customers searching for your services are finding competitors instead."
+
+    # 4. TRANSLATOR STATUS UNTUK KATE WIGGINS (BARU)
+    for key, item in findings_dict.items():
+        sev = item.get('severity', '')
+        if sev == 'High':
+            item['display_status'] = 'Critical issue'
+        elif sev == 'Medium':
+            item['display_status'] = 'Needs attention'
+        elif sev in ['Low', 'Good']:
+            item['display_status'] = 'Healthy status'
+        else:
+            item['display_status'] = sev
 
     data = {
         "client_name": client_name,

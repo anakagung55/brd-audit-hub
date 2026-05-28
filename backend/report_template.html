@@ -960,37 +960,37 @@ body {
         <div class="snap-card {{ findings['technical_seo_foundations']['severity'] | lower }}">
           <div class="snap-label">Website Health</div>
           <div class="snap-title">{{ findings['technical_seo_foundations']['title'] }}</div>
-          <span class="badge b-{{ findings['technical_seo_foundations']['severity'] | lower | replace('medium', 'med') }}">{{ findings['technical_seo_foundations']['severity'] }} Severity</span>
+          <span class="badge b-{{ findings['technical_seo_foundations']['severity'] | lower | replace('medium', 'med') }}">{{ findings['technical_seo_foundations']['display_status'] }}</span>
         </div>
 
         <div class="snap-card {{ findings['on_page_meta_hierarchy']['severity'] | lower }}">
           <div class="snap-label">Google Listing</div>
           <div class="snap-title">{{ findings['on_page_meta_hierarchy']['title'] }}</div>
-          <span class="badge b-{{ findings['on_page_meta_hierarchy']['severity'] | lower | replace('medium', 'med') }}">{{ findings['on_page_meta_hierarchy']['severity'] }} Severity</span>
+          <span class="badge b-{{ findings['on_page_meta_hierarchy']['severity'] | lower | replace('medium', 'med') }}">{{ findings['on_page_meta_hierarchy']['display_status'] }}</span>
         </div>
 
         <div class="snap-card {{ findings['schema_markup_presence']['severity'] | lower }}">
           <div class="snap-label">Business Identity</div>
           <div class="snap-title">{{ findings['schema_markup_presence']['title'] }}</div>
-          <span class="badge b-{{ findings['schema_markup_presence']['severity'] | lower | replace('medium', 'med') }}">{{ findings['schema_markup_presence']['severity'] }} Severity</span>
+          <span class="badge b-{{ findings['schema_markup_presence']['severity'] | lower | replace('medium', 'med') }}">{{ findings['schema_markup_presence']['display_status'] }}</span>
         </div>
 
         <div class="snap-card {{ findings['aeo_content_structure']['severity'] | lower }}">
           <div class="snap-label">AI Readability</div>
           <div class="snap-title">{{ findings['aeo_content_structure']['title'] }}</div>
-          <span class="badge b-{{ findings['aeo_content_structure']['severity'] | lower | replace('medium', 'med') }}">{{ findings['aeo_content_structure']['severity'] }} Severity</span>
+          <span class="badge b-{{ findings['aeo_content_structure']['severity'] | lower | replace('medium', 'med') }}">{{ findings['aeo_content_structure']['display_status'] }}</span>
         </div>
 
         <div class="snap-card {{ findings['faq_quality_and_formatting']['severity'] | lower }}">
           <div class="snap-label">Customer Questions</div>
           <div class="snap-title">{{ findings['faq_quality_and_formatting']['title'] }}</div>
-          <span class="badge b-{{ findings['faq_quality_and_formatting']['severity'] | lower | replace('medium', 'med') }}">{{ findings['faq_quality_and_formatting']['severity'] }} Severity</span>
+          <span class="badge b-{{ findings['faq_quality_and_formatting']['severity'] | lower | replace('medium', 'med') }}">{{ findings['faq_quality_and_formatting']['display_status'] }}</span>
         </div>
 
         <div class="snap-card {{ findings['ai_visibility_signals']['severity'] | lower }}">
           <div class="snap-label">AI Presence</div>
           <div class="snap-title">{{ findings['ai_visibility_signals']['title'] }}</div>
-          <span class="badge b-{{ findings['ai_visibility_signals']['severity'] | lower | replace('medium', 'med') }}">{{ findings['ai_visibility_signals']['severity'] }} Severity</span>
+          <span class="badge b-{{ findings['ai_visibility_signals']['severity'] | lower | replace('medium', 'med') }}">{{ findings['ai_visibility_signals']['display_status'] }}</span>
         </div>
 
       </div>
@@ -1048,7 +1048,7 @@ body {
             <div class="fc-title">{{ findings['technical_seo_foundations']['title'] }}</div>
           </div>
           <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
-            <span class="badge b-{{ findings['technical_seo_foundations']['severity'] | lower | replace('medium', 'med') }}">{{ findings['technical_seo_foundations']['severity'] }} Severity</span>
+            <span class="badge b-{{ findings['technical_seo_foundations']['severity'] | lower | replace('medium', 'med') }}">{{ findings['technical_seo_foundations']['display_status'] }}</span>
           </div>
         </div>
         <div class="fc-finding">{{ findings['technical_seo_foundations']['finding'] }}</div>
@@ -1067,7 +1067,7 @@ body {
             <div class="fc-title">{{ findings['on_page_meta_hierarchy']['title'] }}</div>
           </div>
           <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
-            <span class="badge b-{{ findings['on_page_meta_hierarchy']['severity'] | lower | replace('medium', 'med') }}">{{ findings['on_page_meta_hierarchy']['severity'] }} Severity</span>
+            <span class="badge b-{{ findings['on_page_meta_hierarchy']['severity'] | lower | replace('medium', 'med') }}">{{ findings['on_page_meta_hierarchy']['display_status'] }}</span>
           </div>
         </div>
         <div class="fc-finding">{{ findings['on_page_meta_hierarchy']['finding'] }}</div>
@@ -1086,7 +1086,7 @@ body {
             <div class="fc-title">{{ findings['schema_markup_presence']['title'] }}</div>
           </div>
           <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
-            <span class="badge b-{{ findings['schema_markup_presence']['severity'] | lower | replace('medium', 'med') }}">{{ findings['schema_markup_presence']['severity'] }} Severity</span>
+            <span class="badge b-{{ findings['schema_markup_presence']['severity'] | lower | replace('medium', 'med') }}">{{ findings['schema_markup_presence']['display_status'] }}</span>
           </div>
         </div>
         <div class="fc-finding">{{ findings['schema_markup_presence']['finding'] }}</div>
@@ -1105,7 +1105,7 @@ body {
             <div class="fc-title">{{ findings['aeo_content_structure']['title'] }}</div>
           </div>
           <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
-            <span class="badge b-{{ findings['aeo_content_structure']['severity'] | lower | replace('medium', 'med') }}">{{ findings['aeo_content_structure']['severity'] }} Severity</span>
+            <span class="badge b-{{ findings['aeo_content_structure']['severity'] | lower | replace('medium', 'med') }}">{{ findings['aeo_content_structure']['display_status'] }}</span>
           </div>
         </div>
         <div class="fc-finding">{{ findings['aeo_content_structure']['finding'] }}</div>
@@ -1180,7 +1180,7 @@ body {
               <div class="fc-title">{{ findings['faq_quality_and_formatting']['title'] }}</div>
             </div>
             <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
-              <span class="badge b-{{ findings['faq_quality_and_formatting']['severity'] | lower | replace('medium', 'med') }}">{{ findings['faq_quality_and_formatting']['severity'] }} Severity</span>
+              <span class="badge b-{{ findings['faq_quality_and_formatting']['severity'] | lower | replace('medium', 'med') }}">{{ findings['faq_quality_and_formatting']['display_status'] }}</span>
             </div>
           </div>
           <div class="fc-finding">{{ findings['faq_quality_and_formatting']['finding'] }}</div>
@@ -1198,7 +1198,7 @@ body {
               <div class="fc-title">{{ findings['ai_visibility_signals']['title'] }}</div>
             </div>
             <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
-              <span class="badge b-{{ findings['ai_visibility_signals']['severity'] | lower | replace('medium', 'med') }}">{{ findings['ai_visibility_signals']['severity'] }} Severity</span>
+              <span class="badge b-{{ findings['ai_visibility_signals']['severity'] | lower | replace('medium', 'med') }}">{{ findings['ai_visibility_signals']['display_status'] }}</span>
             </div>
           </div>
           <div class="fc-finding">{{ findings['ai_visibility_signals']['finding'] }}</div>
@@ -1243,7 +1243,6 @@ body {
     <div class="next-cols">
 
       <div class="next-col col-fix">
-        <div class="nc-icon">🔧</div>
         <div class="nc-header">Fix now (effort estimation)</div>
         <div class="nc-sub">High &amp; medium severity items</div>
         <div class="nc-divider"></div>
@@ -1263,7 +1262,6 @@ body {
       </div>
 
       <div class="next-col col-next">
-        <div class="nc-icon">🔭</div>
         <div class="nc-header">Coming month 2</div>
         <div class="nc-sub">UX Audit - what we'll review next.</div>
         <div class="nc-divider"></div>
@@ -1278,7 +1276,6 @@ body {
       </div>
 
       <div class="next-col col-val">
-        <div class="nc-icon">🔍</div>
         <div class="nc-header">Needs deeper validation</div>
         <div class="nc-sub">Useful observations - require more context before prioritising.</div>
         <div class="nc-divider"></div>
