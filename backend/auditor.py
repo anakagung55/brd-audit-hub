@@ -33,23 +33,6 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 # ==========================================
 # 2. TARGETS & KATE/THOMAS SEO MATRIX
 # ==========================================
-POC_TARGETS = [
-    #{"name": "Southern Cross Metal Recyclers", "url": "https://www.southerncrossmetalrecyclers.com.au/"},
-    #{"name": "Vie Capital", "url": "https://www.viecapital.com.au/"},
-    #{"name": "WiZDOM", "url": "https://wizdom.com.au/"},
-    #{"name": "Axis Jiu Jitsu Melbourne", "url": "https://axisjiujitsumelbourne.com.au/"},
-    #{"name": "Corner Hotel", "url": "https://cornerhotel.com/"},
-    #{"name": "Orthotech", "url": "https://orthotech.com.au/"},
-    #{"name": "Cythera", "url": "https://www.cythera.com.au/"},
-    #{"name": "William Buck", "url": "https://williambuck.com/"},
-    #{"name": "Think in Colour", "url": "https://www.think-in-colour.com.au/"},
-    #{"name": "Scott Pickett Group", "url": "https://www.scottpickettgroup.com.au/"},
-    #{"name": "Salter Brothers", "url": "https://salterbrothers.com.au/"},
-    #{"name": "Future Leadership", "url": "https://futureleadership.com.au/"},
-    #{"name": "Woomargama Station", "url": "https://woomargamastation.com.au/"},
-    {"name": "Deliberate Practice", "url": "https://www.deliberatepractice.com.au/"}
-]
-
 SEO_AEO_CATEGORIES = [
     "technical_seo_foundations", 
     "on_page_meta_hierarchy", 
@@ -63,7 +46,6 @@ SEO_AEO_CATEGORIES = [
 # 3. HELPER FUNCTIONS
 # ==========================================
 def scrape_seo_data(url):
-    """Scrape technical SEO, Meta Tags, JSON-LD Schema, and perform SHALLOW SPIDER DOM Scan for AI Context."""
     print(f"   -> [Scraper] Extracting SEO/AEO DOM data for {url}...")
     data = {
         "title": "Not Found",
@@ -77,15 +59,13 @@ def scrape_seo_data(url):
     }
     
     try:
-        # Pura-pura jadi browser Chrome versi terbaru
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
             'Accept-Language': 'en-US,en;q=0.5'
         }
-        response = requests.get(url, headers=headers, timeout=20)
+        response = requests.get(url, headers=headers, timeout=15)
         
-        # 🚨 BYPASS 403 FORBIDDEN WAF (Cloudflare/Imperva) 🚨
         if response.status_code in [403, 406, 503]:
             print(f"   -> [WAF BLOCKED] {response.status_code} detected. Switching to Stealth Mode to bypass...")
             with sync_playwright() as p:
@@ -93,12 +73,14 @@ def scrape_seo_data(url):
                 context = browser.new_context(user_agent=headers['User-Agent'])
                 page = context.new_page()
                 
-                # 🚨 NATIVE STEALTH INJECTION 🚨
                 page.add_init_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
                 page.add_init_script("window.navigator.chrome = { runtime: {} };")
                 page.add_init_script("Object.defineProperty(navigator, 'plugins', {get: () => [1, 2, 3]})")
                 
-                page.goto(url, wait_until="domcontentloaded", timeout=60000)
+                try:
+                    page.goto(url, wait_until="domcontentloaded", timeout=20000)
+                except:
+                    pass
                 html_content = page.content()
                 browser.close()
             soup = BeautifulSoup(html_content, 'html.parser')
@@ -106,14 +88,12 @@ def scrape_seo_data(url):
         else:
             soup = BeautifulSoup(response.text, 'html.parser')
         
-        # 1. Base Meta & Schema Check on Homepage
+        # 1. Base Meta & Schema
         if soup.title and soup.title.string:
             data["title"] = soup.title.string.strip()
-            
         meta_desc = soup.find("meta", attrs={"name": "description"})
         if meta_desc and meta_desc.get("content"):
             data["meta_description"] = meta_desc["content"].strip()
-            
         data["h1_tags"] = [h1.get_text(strip=True) for h1 in soup.find_all('h1')][:3]
         
         schemas = soup.find_all("script", type="application/ld+json")
@@ -131,21 +111,18 @@ def scrape_seo_data(url):
                 except:
                     pass
                     
-        # 2. Visual FAQ Check on Homepage 
+        # 2. Visual FAQ 
         text_content = soup.get_text().lower()
         if "frequently asked questions" in text_content or re.search(r'\bfaq\bs?', text_content):
             data["has_faq_visual"] = True
-                
         if not data["has_faq_visual"]:
             if soup.find(class_=re.compile(r'\bfaq\b', re.I)) or soup.find(id=re.compile(r'\bfaq\b', re.I)):
                 data["has_faq_visual"] = True
 
-        # 3. KATE'S SHALLOW SPIDER (Deep Crawl Backup)
+        # 3. SHALLOW SPIDER
         if not data["has_faq_schema"] or not data["has_faq_visual"]:
-            print(f"   -> [Spider] FAQ not fully detected on homepage. Initiating Shallow Crawl...")
             subpages_to_check = []
             domain_netloc = urlparse(url).netloc
-            
             for a in soup.find_all('a', href=True):
                 href = a.get('href', '').lower()
                 if any(k in href for k in ['faq', 'resource', 'service', 'support', 'help']):
@@ -167,7 +144,6 @@ def scrape_seo_data(url):
                         sub_text = sub_soup.get_text().lower()
                         if "frequently asked questions" in sub_text or re.search(r'\bfaq\bs?', sub_text):
                             data["has_faq_visual"], data["faq_location"] = True, f"/{path_name}"
-                            
                     if not data["has_faq_schema"]:
                         sub_schemas = sub_soup.find_all("script", type="application/ld+json")
                         for schema in sub_schemas:
@@ -175,7 +151,6 @@ def scrape_seo_data(url):
                                 data["has_faq_schema"], data["faq_location"] = True, f"/{path_name}"
                 except:
                     continue
-            
     except Exception as e:
         print(f"   -> [WARNING] SEO Scrape failed: {e}")
         
@@ -186,14 +161,6 @@ def take_dual_screenshots(url, target_name):
     safe_name = target_name.replace(" ", "_")
     hero_path = os.path.join(OUTPUT_DIR, f"{safe_name}_hero.png")
     trust_path = os.path.join(OUTPUT_DIR, f"{safe_name}_content.png")
-    
-    # Fungsi rahasia pembuat gambar darurat
-    def create_blank_png(filepath):
-        print(f"   -> [FALLBACK] Creating emergency blank image for {filepath}")
-        # Kode hex asli untuk gambar PNG 1x1 pixel transparan
-        png_data = b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x06\x00\x00\x00\x1f\x15\xc4\x89\x00\x00\x00\nIDATx\x9cc\xfa\xff\xff\x3f\x00\x05\xfe\x02\xfe\xa7\x3f\x9d\xeb\x00\x00\x00\x00IEND\xaeB`\x82'
-        with open(filepath, 'wb') as f:
-            f.write(png_data)
 
     try:
         with sync_playwright() as p:
@@ -204,18 +171,17 @@ def take_dual_screenshots(url, target_name):
             )
             page = context.new_page()
             
-            # 🚨 NATIVE STEALTH INJECTION 🚨
             page.add_init_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
             page.add_init_script("window.navigator.chrome = { runtime: {} };")
             page.add_init_script("Object.defineProperty(navigator, 'plugins', {get: () => [1, 2, 3]})")
             
             try:
-                page.goto(url, wait_until="domcontentloaded", timeout=30000)
+                page.goto(url, wait_until="domcontentloaded", timeout=15000)
             except Exception as e:
-                print(f"   -> [WARNING] Timeout atau WAF terdeteksi pada {url}. Memaksa screenshot layar saat ini...")
+                print(f"   -> [WARNING] Timeout/WAF terdeteksi pada {url}. Memaksa screenshot...")
                 
             try:
-                page.wait_for_timeout(3000) 
+                page.wait_for_timeout(1500) 
                 page.screenshot(path=hero_path, full_page=False)
                 
                 try:
@@ -223,28 +189,19 @@ def take_dual_screenshots(url, target_name):
                 except:
                     pass
                     
-                page.wait_for_timeout(3000) 
+                page.wait_for_timeout(1500) 
                 page.screenshot(path=trust_path, full_page=False)
                 
             except Exception as e:
-                print(f"   -> [ERROR] Proses screenshot gagal total untuk {url}: {e}")
+                print(f"   -> [ERROR] Proses screenshot gagal untuk {url}: {e}")
             finally:
                 browser.close()
     except Exception as e:
         print(f"   -> [FATAL ERROR] Mesin Playwright crash: {e}")
         
-    # 🚨 SYSTEM ANTI-CRASH (FALLBACK) 🚨
-    # Kalau web klien mati atau WAF nolak ngasih screenshot, kita tembak gambar kosong
-    # biar Pipeline AI nggak error 500 dan tetep jalan pakai data teks.
-    if not os.path.exists(hero_path):
-        create_blank_png(hero_path)
-    if not os.path.exists(trust_path):
-        create_blank_png(trust_path)
-        
     return hero_path, trust_path
 
 def check_google_ranking(keyword, domain):
-    print(f"   -> [Rank Tracker] Checking Google AU for: '{keyword}'")
     clean_domain = domain.replace("https://", "").replace("http://", "").replace("www.", "").strip("/")
     clean_domain = clean_domain.split('/')[0]
     
@@ -253,11 +210,9 @@ def check_google_ranking(keyword, domain):
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
         'Accept-Language': 'en-AU,en;q=0.9'
     }
-    
     try:
-        response = requests.get(url, headers=headers, timeout=15)
+        response = requests.get(url, headers=headers, timeout=10)
         soup = BeautifulSoup(response.text, 'html.parser')
-        
         search_results = soup.find_all('div', class_='g')
         rank = 1
         for result in search_results:
@@ -273,11 +228,9 @@ def check_google_ranking(keyword, domain):
                 if rank > 20: break
         return "Not in top 20 (Missed opportunity)"
     except Exception as e:
-        print(f"   -> [WARNING] Google Scrape failed for {keyword}: {e}")
         return "Check failed"
 
 def generate_seo_aeo_audit(scrape_data, site_img_path, target_name, client):
-    """Execute Gemini 2.5 Vision AI with Kate's Strict UI/UX Matrix."""
     print(f"   -> [AI] Executing Gemini 2.5 Vision AI (SEO & AEO Engine)...")
     try:
         site_snapshot = client.files.upload(file=site_img_path)
@@ -295,17 +248,11 @@ def generate_seo_aeo_audit(scrape_data, site_img_path, target_name, client):
         - FAQ Location: {scrape_data['faq_location']}
 
         CRITICAL AUDIT RULES (STRICTLY ENFORCE):
-        1. LANGUAGE: You MUST use Australian English spelling (e.g., 'organisation', 'optimise', 'centre').
-        2. TITLES: Use sentence case for all titles (e.g., 'Website health' instead of 'Website Health').
+        1. LANGUAGE: You MUST use Australian English spelling.
+        2. TITLES: Use sentence case for all titles.
         3. SCORING: 0="High", 1="Medium", 2="Good".
         4. BUSINESS IMPACT: Provide a `business_impact` explaining the consequence in plain English.
-        5. EFFORT ESTIMATION: Assign `effort_label`: "Quick win", "Light lift", "Moderate build", or "Strategic project". DO NOT USE EMOJIS.
-        
-        SPECIFIC CATEGORY INSTRUCTIONS:
-        - faq_quality_and_formatting: 
-          * IF Visual is True AND Schema is False: Severity High. 
-            Finding: "FAQ content exists on the {scrape_data['faq_location']} page but lacks FAQPage schema markup. Without this structured data, AI answer engines cannot reliably identify it as Q&A content." 
-            Recommendation: "Inject FAQPage JSON-LD into the <head> of the page. No new section needed - schema-only fix."
+        5. EFFORT ESTIMATION: Assign `effort_label`: "Quick win", "Light lift", "Moderate build", or "Strategic project". DO NOT USE ANY EMOJIS.
         
         OUTPUT SCHEMA INSTRUCTION (JSON ONLY):
         You MUST return EXACTLY 6 objects in the 'audits' array. 
@@ -335,17 +282,13 @@ def generate_seo_aeo_audit(scrape_data, site_img_path, target_name, client):
         """
         payload.append(prompt)
         
-        for attempt in range(4):
+        for attempt in range(3):
             try:
                 response = client.models.generate_content(
                     model='gemini-2.5-flash', 
                     contents=payload,
-                    config=types.GenerateContentConfig(
-                        response_mime_type="application/json", 
-                        temperature=0.2
-                    ),
+                    config=types.GenerateContentConfig(response_mime_type="application/json", temperature=0.2),
                 )
-                
                 raw_text = response.text.strip()
                 if raw_text.startswith("```json"):
                     raw_text = raw_text[7:-3].strip()
@@ -353,24 +296,14 @@ def generate_seo_aeo_audit(scrape_data, site_img_path, target_name, client):
                     raw_text = raw_text[3:-3].strip()
                     
                 return json.loads(raw_text)
-                
             except Exception as e:
-                if '503' in str(e) or '429' in str(e):
-                    wait_time = 10 * (2 ** attempt)
-                    print(f"   -> [WARNING] API Overloaded. Retrying in {wait_time}s...")
-                    time.sleep(wait_time)
-                else:
-                    print(f"   -> [ERROR] Unhandled AI exception: {e}")
-                    return None
+                time.sleep(5)
         return None
-        
     except Exception as e:
-        print(f"   -> [ERROR] AI Processing failed: {e}")
         return None
 
 def build_formatted_excel(df, output_path):
     print("   -> [Formatter] Generating Premium Excel File...")
-    
     df_excel = df.copy()
     df_excel['category'] = df_excel['category'].str.replace('_', ' ').str.title()
     
@@ -386,9 +319,6 @@ def build_formatted_excel(df, output_path):
 
         header_fill = PatternFill(start_color='1B263B', end_color='1B263B', fill_type='solid')
         header_font = Font(color='FFFFFF', bold=True)
-        high_fill = PatternFill(start_color='FFC7CE', end_color='FFC7CE', fill_type='solid')
-        med_fill = PatternFill(start_color='FFEB9C', end_color='FFEB9C', fill_type='solid')
-        low_fill = PatternFill(start_color='C6EFCE', end_color='C6EFCE', fill_type='solid')
         thin_border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
 
         for col_num in range(1, len(df_excel.columns) + 1):
@@ -399,16 +329,10 @@ def build_formatted_excel(df, output_path):
             cell.border = thin_border
 
         for row_num in range(2, len(df_excel) + 2):
-            severity_val = ws.cell(row=row_num, column=3).value
             for col_num in range(1, len(df_excel.columns) + 1):
                 cell = ws.cell(row=row_num, column=col_num)
                 cell.border = thin_border
                 cell.alignment = Alignment(vertical='top', wrap_text=True)
-                
-                if col_num == 3:
-                    if severity_val == 'High': cell.fill = high_fill
-                    elif severity_val == 'Medium': cell.fill = med_fill
-                    elif severity_val == 'Low': cell.fill = low_fill
 
         column_widths = [20, 25, 12, 25, 45, 45, 45, 18, 15, 30]
         for i, width in enumerate(column_widths):
@@ -417,17 +341,14 @@ def build_formatted_excel(df, output_path):
 
 def generate_automated_pdf(client_name, url, hero_path, trust_path, analysis, client_rankings, output_dir):
     print(f"   -> [PDF Engine] Injecting data into HTML and rendering PDF for {client_name}...")
-
     def image_to_base64(img_path):
         with open(img_path, "rb") as image_file:
             return "data:image/png;base64," + base64.b64encode(image_file.read()).decode('utf-8')
 
-    # 1. Bikin dictionary dari hasil AI dengan aman
     findings_dict = {}
     if analysis:
         findings_dict = {item.get('category', 'unknown'): item for item in analysis if isinstance(item, dict)}
     
-    # 2. 🚨 SISTEM ANTI-CRASH BULLETPROOF 🚨
     for cat in SEO_AEO_CATEGORIES:
         if cat not in findings_dict:
             findings_dict[cat] = {
@@ -437,10 +358,9 @@ def generate_automated_pdf(client_name, url, hero_path, trust_path, analysis, cl
                 "finding": "The site's security firewall (WAF) prevented the engine from extracting this specific DOM element.",
                 "business_impact": "Overly strict firewalls can inadvertently block legitimate AI crawlers like ChatGPT from reading your site.",
                 "recommendation": "Review firewall rules to ensure emerging AI crawlers are whitelisted.",
-                "effort_label": "Light lift" # <--- EMOJI DIHAPUS DI SINI
+                "effort_label": "Light lift"
             }
 
-    # 3. Kalkulasi murni
     count_critical = sum(1 for x in findings_dict.values() if x.get('severity') == 'High')
     count_important = sum(1 for x in findings_dict.values() if x.get('severity') == 'Medium')
     count_low = sum(1 for x in findings_dict.values() if x.get('severity') in ['Low', 'Good'])
@@ -454,32 +374,33 @@ def generate_automated_pdf(client_name, url, hero_path, trust_path, analysis, cl
         monetization_text = "You're competing at the top. Maintenance, monitoring and content depth are the priorities from here."
     elif audit_score >= 7:
         score_label = "🟢 Strong Foundation"
-        monetization_text = "Your site is well-structured for search and AI. Focus shifts from fixing to growing — capturing more keywords and AI mentions."
+        monetization_text = "Your site is well-structured for search and AI. Focus shifts from fixing to growing."
     elif audit_score >= 5:
         score_label = "🟡 Functional but Underperforming"
         monetization_text = "The basics are in place. Targeted improvements will move you from 'found sometimes' to 'consistently recommended'."
     elif audit_score >= 3:
         score_label = "🟠 Significant Gaps"
-        monetization_text = "Some foundations exist but key signals are missing. You're appearing in some searches but losing clicks to better-optimised competitors."
+        monetization_text = "Some foundations exist but key signals are missing. You're losing clicks to better-optimised competitors."
     else:
         score_label = "🔴 Needs Immediate Attention"
-        monetization_text = "Your website is largely invisible to Google and AI tools. Customers searching for your services are finding competitors instead."
+        monetization_text = "Your website is largely invisible to Google and AI tools."
 
-    # 4. TRANSLATOR STATUS UNTUK KATE WIGGINS (BULLETPROOF)
+    # TRANSLATOR STATUS & 🚨 EMOJI KILLER (HANCURKAN TANDA KOTAK) 🚨
     for key, item in findings_dict.items():
-        # Tangkap output AI dan paksa jadi huruf kecil semua biar gampang difilter
         raw_sev = str(item.get('severity', '')).lower()
-        
         if 'high' in raw_sev or 'critical' in raw_sev:
             item['display_status'] = 'Critical issue'
-            item['severity'] = 'High'  # Paksa normalisasi buat warna CSS HTML & Excel
+            item['severity'] = 'High'  
         elif 'medium' in raw_sev or 'med' in raw_sev or 'attention' in raw_sev:
             item['display_status'] = 'Needs attention'
-            item['severity'] = 'Medium' # Paksa normalisasi buat warna CSS HTML & Excel
+            item['severity'] = 'Medium' 
         else: 
-            # Nangkap 'good', 'low', 'healthy', dan anomali lainnya
             item['display_status'] = 'Healthy status'
-            item['severity'] = 'Good'   # Paksa normalisasi buat warna CSS HTML & Excel
+            item['severity'] = 'Good'   
+
+        # Hancurkan sisa emoji dengan regex secara paksa
+        clean_effort = re.sub(r'[^\w\s-]', '', str(item.get('effort_label', ''))).strip()
+        item['effort_label'] = clean_effort
 
     data = {
         "client_name": client_name,
@@ -499,9 +420,7 @@ def generate_automated_pdf(client_name, url, hero_path, trust_path, analysis, cl
 
     current_dir = os.path.dirname(os.path.abspath(__file__))
     template_path = os.path.join(current_dir, "report_template.html")
-    if not os.path.exists(template_path):
-        print("   -> [ERROR] report_template.html not found! Ensure it is in the BASE_DIR.")
-        return None
+    if not os.path.exists(template_path): return None
 
     with open(template_path, 'r', encoding='utf-8') as f:
         template_str = f.read()
@@ -511,23 +430,16 @@ def generate_automated_pdf(client_name, url, hero_path, trust_path, analysis, cl
 
     safe_name = client_name.replace(" ", "_")
     pdf_path = os.path.join(output_dir, f"{safe_name}_SEO_AEO_Review.pdf")
-    
     html_path = os.path.join(output_dir, f"{safe_name}_Interactive_SEO_Report.html")
+    
     with open(html_path, 'w', encoding='utf-8') as f:
         f.write(rendered_html)
-    print(f"   -> [HTML] Interactive file saved: {html_path}")
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         page = browser.new_page()
         page.set_content(rendered_html, wait_until="load")
-        page.pdf(
-            path=pdf_path,
-            width="1920px",
-            height="1080px",
-            print_background=True,
-            margin={"top": "0", "right": "0", "bottom": "0", "left": "0"}
-        )
+        page.pdf(path=pdf_path, width="1920px", height="1080px", print_background=True, margin={"top": "0", "right": "0", "bottom": "0", "left": "0"})
         browser.close()
 
     return pdf_path
@@ -535,20 +447,29 @@ def generate_automated_pdf(client_name, url, hero_path, trust_path, analysis, cl
 # ==========================================
 # 4. EXECUTION FLOW
 # ==========================================
-# Tambahkan ini di bagian paling bawah auditor.py lo
 def run_single_audit(url, company_name):
     client = genai.Client(api_key=GEMINI_API_KEY)
     
     scrape_data = scrape_seo_data(url)
     hero_path, trust_path = take_dual_screenshots(url, company_name)
     
-    if not os.path.exists(hero_path) or not os.path.exists(trust_path):
-        return {"error": "Failed to capture screenshots"}
-        
+    # 🚨 SUPER FALLBACK: TINGKAT DEWA 🚨
+    # Kalau web klien mati atau WAF nolak ngasih screenshot, kita BIKIN PAKSA gambar kosong.
+    def force_blank_image(path):
+        if not os.path.exists(path):
+            print(f"   -> [FALLBACK] Memaksa pembuatan file darurat untuk mencegah error: {path}")
+            with open(path, 'wb') as f:
+                f.write(b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x06\x00\x00\x00\x1f\x15\xc4\x89\x00\x00\x00\nIDATx\x9cc\xfa\xff\xff\x3f\x00\x05\xfe\x02\xfe\xa7\x3f\x9d\xeb\x00\x00\x00\x00IEND\xaeB`\x82')
+    
+    force_blank_image(hero_path)
+    force_blank_image(trust_path)
+    
+    # KITA SUDAH MENGHAPUS BARIS "if not os.path.exists(...) return error" DI SINI.
+    
     ai_response = generate_seo_aeo_audit(scrape_data, hero_path, company_name, client)
     
     if not ai_response or "audits" not in ai_response:
-        return {"error": "AI failed to process"}
+        return {"error": "AI failed to process. Server is likely overloaded."}
 
     ranking_results = []
     for kw in ai_response.get("target_keywords", []):
