@@ -438,17 +438,21 @@ def generate_automated_pdf(client_name, url, hero_path, trust_path, analysis, cl
         score_label = "🔴 Needs Immediate Attention"
         monetization_text = "Your website is largely invisible to Google and AI tools. Customers searching for your services are finding competitors instead."
 
-    # 4. TRANSLATOR STATUS UNTUK KATE WIGGINS (BARU)
+    # 4. TRANSLATOR STATUS UNTUK KATE WIGGINS (BULLETPROOF)
     for key, item in findings_dict.items():
-        sev = item.get('severity', '')
-        if sev == 'High':
+        # Tangkap output AI dan paksa jadi huruf kecil semua biar gampang difilter
+        raw_sev = str(item.get('severity', '')).lower()
+        
+        if 'high' in raw_sev or 'critical' in raw_sev:
             item['display_status'] = 'Critical issue'
-        elif sev == 'Medium':
+            item['severity'] = 'High'  # Paksa normalisasi buat warna CSS HTML & Excel
+        elif 'medium' in raw_sev or 'med' in raw_sev or 'attention' in raw_sev:
             item['display_status'] = 'Needs attention'
-        elif sev in ['Low', 'Good']:
+            item['severity'] = 'Medium' # Paksa normalisasi buat warna CSS HTML & Excel
+        else: 
+            # Nangkap 'good', 'low', 'healthy', dan anomali lainnya
             item['display_status'] = 'Healthy status'
-        else:
-            item['display_status'] = sev
+            item['severity'] = 'Good'   # Paksa normalisasi buat warna CSS HTML & Excel
 
     data = {
         "client_name": client_name,
