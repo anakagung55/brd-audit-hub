@@ -187,44 +187,60 @@ def take_dual_screenshots(url, target_name):
     hero_path = os.path.join(OUTPUT_DIR, f"{safe_name}_hero.png")
     trust_path = os.path.join(OUTPUT_DIR, f"{safe_name}_content.png")
     
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True, args=["--no-sandbox", "--disable-blink-features=AutomationControlled"])
-        context = browser.new_context(
-            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36",
-            viewport={'width': 1280, 'height': 800}
-        )
-        page = context.new_page()
-        
-        # 🚨 NATIVE STEALTH INJECTION 🚨
-        page.add_init_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
-        page.add_init_script("window.navigator.chrome = { runtime: {} };")
-        page.add_init_script("Object.defineProperty(navigator, 'plugins', {get: () => [1, 2, 3]})")
-        
-        try:
-            # Beri batas waktu 45 detik. Jika macet, biarkan terjadi exception.
-            page.goto(url, wait_until="domcontentloaded", timeout=45000)
-        except Exception as e:
-            print(f"   -> [WARNING] Timeout atau WAF terdeteksi pada {url}. Memaksa screenshot layar saat ini...")
+    # Fungsi rahasia pembuat gambar darurat
+    def create_blank_png(filepath):
+        print(f"   -> [FALLBACK] Creating emergency blank image for {filepath}")
+        # Kode hex asli untuk gambar PNG 1x1 pixel transparan
+        png_data = b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x06\x00\x00\x00\x1f\x15\xc4\x89\x00\x00\x00\nIDATx\x9cc\xfa\xff\xff\x3f\x00\x05\xfe\x02\xfe\xa7\x3f\x9d\xeb\x00\x00\x00\x00IEND\xaeB`\x82'
+        with open(filepath, 'wb') as f:
+            f.write(png_data)
+
+    try:
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True, args=["--no-sandbox", "--disable-blink-features=AutomationControlled"])
+            context = browser.new_context(
+                user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36",
+                viewport={'width': 1280, 'height': 800}
+            )
+            page = context.new_page()
             
-        # Pisahkan blok screenshot agar tetap dieksekusi meskipun halaman macet
-        try:
-            page.wait_for_timeout(3000) 
-            page.screenshot(path=hero_path, full_page=False)
+            # 🚨 NATIVE STEALTH INJECTION 🚨
+            page.add_init_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
+            page.add_init_script("window.navigator.chrome = { runtime: {} };")
+            page.add_init_script("Object.defineProperty(navigator, 'plugins', {get: () => [1, 2, 3]})")
             
             try:
-                # Scroll ke bawah. Abaikan jika script website mengunci fungsi scroll.
-                page.evaluate("window.scrollTo(0, document.body.scrollHeight / 2)")
-            except:
-                pass
+                page.goto(url, wait_until="domcontentloaded", timeout=30000)
+            except Exception as e:
+                print(f"   -> [WARNING] Timeout atau WAF terdeteksi pada {url}. Memaksa screenshot layar saat ini...")
                 
-            page.wait_for_timeout(3000) 
-            page.screenshot(path=trust_path, full_page=False)
-            
-        except Exception as e:
-            print(f"   -> [ERROR] Proses screenshot gagal total untuk {url}: {e}")
-        finally:
-            browser.close()
-            
+            try:
+                page.wait_for_timeout(3000) 
+                page.screenshot(path=hero_path, full_page=False)
+                
+                try:
+                    page.evaluate("window.scrollTo(0, document.body.scrollHeight / 2)")
+                except:
+                    pass
+                    
+                page.wait_for_timeout(3000) 
+                page.screenshot(path=trust_path, full_page=False)
+                
+            except Exception as e:
+                print(f"   -> [ERROR] Proses screenshot gagal total untuk {url}: {e}")
+            finally:
+                browser.close()
+    except Exception as e:
+        print(f"   -> [FATAL ERROR] Mesin Playwright crash: {e}")
+        
+    # 🚨 SYSTEM ANTI-CRASH (FALLBACK) 🚨
+    # Kalau web klien mati atau WAF nolak ngasih screenshot, kita tembak gambar kosong
+    # biar Pipeline AI nggak error 500 dan tetep jalan pakai data teks.
+    if not os.path.exists(hero_path):
+        create_blank_png(hero_path)
+    if not os.path.exists(trust_path):
+        create_blank_png(trust_path)
+        
     return hero_path, trust_path
 
 def check_google_ranking(keyword, domain):
