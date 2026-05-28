@@ -195,22 +195,33 @@ def take_dual_screenshots(url, target_name):
         )
         page = context.new_page()
         
-        # 🚨 NATIVE STEALTH INJECTION SAAT SCREENSHOT 🚨
+        # 🚨 NATIVE STEALTH INJECTION 🚨
         page.add_init_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
         page.add_init_script("window.navigator.chrome = { runtime: {} };")
         page.add_init_script("Object.defineProperty(navigator, 'plugins', {get: () => [1, 2, 3]})")
         
         try:
-            page.goto(url, wait_until="domcontentloaded", timeout=60000)
-            page.wait_for_timeout(3000) 
+            # Beri batas waktu 45 detik. Jika macet, biarkan terjadi exception.
+            page.goto(url, wait_until="domcontentloaded", timeout=45000)
+        except Exception as e:
+            print(f"   -> [WARNING] Timeout atau WAF terdeteksi pada {url}. Memaksa screenshot layar saat ini...")
             
+        # Pisahkan blok screenshot agar tetap dieksekusi meskipun halaman macet
+        try:
+            page.wait_for_timeout(3000) 
             page.screenshot(path=hero_path, full_page=False)
-            page.evaluate("window.scrollTo(0, document.body.scrollHeight / 2)")
+            
+            try:
+                # Scroll ke bawah. Abaikan jika script website mengunci fungsi scroll.
+                page.evaluate("window.scrollTo(0, document.body.scrollHeight / 2)")
+            except:
+                pass
+                
             page.wait_for_timeout(3000) 
             page.screenshot(path=trust_path, full_page=False)
             
         except Exception as e:
-            print(f"   -> [ERROR] Screenshot failed for {url}: {e}")
+            print(f"   -> [ERROR] Proses screenshot gagal total untuk {url}: {e}")
         finally:
             browser.close()
             
